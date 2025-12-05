@@ -1,27 +1,30 @@
 ---
-title: Project title
-author: by Team name
-output: github_document
+title: Coffee Sales
+author: Riley Martindale
+output: 
+  pdf_document: default
+  xaringan::moon_reader:
+    css: xaringan-themer.css
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
 ---
 
 ## Summary
 
-Write-up of your project and findings go here. 
-Think of this as the text of your presentation. 
-The length should be roughly 5 minutes when read out loud.
-Although pacing varies, a 5-minute speech is roughly 750 words. 
-To use the word count addin, select the text you want to count the words of (probably this is the 
-Summary section of this document, go to Addins, and select the `Word count` addin).
-This addin counts words using two different algorithms, but the results should be similar and as long as you're in the ballpark of 750 words, you're good! 
-The addin will ignore code chunks and only count the words in prose.
-
-You can also load your data here and present any analysis results / plots, but I strongly urge you to keep that to a minimum (maybe only the most important graphic, if you have one you can choose). 
-And make sure to hide your code with  `echo = FALSE` unless the point you are trying to make is about the code itself.
-Your results with proper output and graphics go in your presentation, this space is for a brief summary of your project.
-
-```{r load-data, echo = FALSE}
-# load data here, if you like
-```
+The dataset that I'm going to be looking at today is called Coffee Sales. By using this dataset, I'm going to analyze how to help this business thrive. By looking at factors such as the time of day, drinks, day of the week, and price, I can look to see what business decisions would need to be made to reflect these trends. The dataset spans one year. There are 3,547 rows, with each being a different coffee order, and 11 columns: the hour of the day, if the patron paid cash or card, the price of the drink ordered, the time of day, if it was morning, afternoon, or evening, what day of the week it was, what month it was, the day of the week numerically, for example, 5 would be Friday, and the month numerically, for example, 3 would be March, the exact date and the exact time of sale. 
+  Looking at the most frequent hour of the day that coffee was sold, we can see that 10 o'clock has the most amount of coffees sold, with 328 orders. One might think that the morning times are going to be more popular, because 10 o'clock is the most frequent, and that's in the morning. However, this is actually not correct. By looking at the time of day, being afternoon, morning, or night, we can see that the afternoon actually has the most coffee sales. This contradicts with what we saw in the first table, because that showed 10 o'clock as the most populated time, but this suggests that in the afternoon there's enough sales to make up for the fact that 10 a.m. has the most amount per hour. One of the other things to note is that the café isn't open 24-7, so some of those early hour times, and especially late at night, are not going to be getting sales because the café isn't open. 
+  If I were the manager in this position, looking at it from a business standpoint, I would try and have more employees working in the afternoon to provide faster service, and during the morning shift I would try and avoid scheduling breaks in the 10 o'clock hour. 
+   By studying the days of the week, we can see that Tuesday is the most popular day in the coffee shop, with 572 orders. One reason for this might be the fact that people are kind of getting over the Monday blues. People might be needing a morning pick-me-up. We can also see that towards the later days of the week, the number of sales gets less frequent,especially on Saturday and Sunday (6 and 7). This possibly correlates with people not working on weekends. 
+   We can look at the frequency of the coffee sales based on the time of day and the day of the week. We can see that there are more sales in the mid-morning and mid-afternoon, and there's dips in sales in the early morning and late at night. Again, that correlates with the cafe not being open. We can see that mid-morning and mid-afternoon also have more sales than, say, noon. This might be because people need that morning coffee and then a boost in the afternoon, or it's a before work and after work drink. The lighter colors indicate a higher amount of sales. We can also see that there is a lot of lighter shades on Tuesday, which correlates with that we saw Tuesday being the most popular day. 
+   Next, we look at the most popular drinks. I had predicted that it would be a latte, but I was actually incorrect. The most popular drink sold was the Americano with milk at 809 drinks. It is also noted that espresso is the least popular drink with 129 drinks sold. I think this is a very interesting correlation because an Americano is an espresso-based drink. I think that there are less espressos ordered because the people who would  instead ordered Americanos with milk. Latte is the second most-sold drink, and espresso and cocoa are the least popular drinks. I think it would be very interesting to look at this data set with a wider collection of drinks, including teas and matcha.
+   Next, we look at the frequency of drinks for each day of the week. This can kind of show you as the day of the week increases how the amount of sales for each drink is going to fluctuate. It's very interesting to me that espresso widens a lot towards the middle of the week: people will need that boost of caffeine to make it to Friday. Cocoa, we see a big jump on Tuesdays and on Fridays. It's possible that people are looking for comfort. It could be interesting to look at a correlation between the type of weather and the drinks sold. The cappuccino stays fairly steady throughout the week. 
+   What I would suggest for this, again from a business standpoint, would be to prepare accurately for these increased sales on these days and to make sure that all of the supplies are in stock to expect a rush or a dip.
+   Next, we're going to look at the linear regression. We're going to compare the amount of money made with the different days of the week. We saw that the intercept is 31.809 and the weekday sort is -0.0427. This equation is going to be money = 31.809 - 0.0427 * Weekdaysort. As the day of the week goes on, the total amount of money spent by each customer is expected to decrease by 0.0427 dollars or 4 cents. The baseline for this is $31.81 spent, which we get from the intercept. Our R-squared value for this is 0.0002980488.We can basically expect a 0% variability, but to be more specific, it's a 0.03% variability.
+  In conclusion, we found that Tuesday is the most popular day of the week for coffee sales. We looked at the difference between coffee sales in the morning at 10 a.m., which was the most popular hour, versus the popularity of afternoon sales. We can see that the amount of money spent is expected to decline throughout the week. I predicted the opposite. I thought that people would need it as a pick-me-up at the end of the week or a celebration of finishing the week. The americano with milk was found to be the most popular drink.
 
 ## Presentation
 
@@ -29,11 +32,9 @@ Our presentation can be found [here](presentation/presentation.html).
 
 ## Data 
 
-Include a citation for your data here. 
-See http://libraryguides.vu.edu.au/c.php?g=386501&p=4347840 for guidance on proper citation for datasets. 
-If you got your data off the web, make sure to note the retrieval date.
+Bilal, W. (2025, September 23). Exploring Coffee Sales with EDA & Visualization. Kaggle. https://www.kaggle.com/datasets/wardabilal/exploring-coffee-sales-with-eda-and-visualization 
 
 ## References
 
-List any references here. You should, at a minimum, list your data source.
+Bilal, W. (2025, September 23). Exploring Coffee Sales with EDA & Visualization. Kaggle. https://www.kaggle.com/datasets/wardabilal/exploring-coffee-sales-with-eda-and-visualization 
 

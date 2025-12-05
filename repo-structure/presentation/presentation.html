@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Presentation title</title>
+    <title>Coffee Sales</title>
     <meta charset="utf-8" />
-    <meta name="author" content="Team name   Names of team members" />
-    <meta name="date" content="2025-09-03" />
-    <script src="libs/header-attrs-2.29/header-attrs.js"></script>
+    <meta name="author" content="Riley Martindale" />
+    <meta name="date" content="2025-12-04" />
+    <script src="libs/header-attrs-2.30/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -13,19 +13,16 @@
 class: center, middle, inverse, title-slide
 
 .title[
-# Presentation title
-]
-.subtitle[
-## Presentation subtitle (if any)
+# Coffee Sales
 ]
 .author[
-### Team name <br> Names of team members
+### Riley Martindale
 ]
 .institute[
-### University of Edinburgh
+### Math225 #61909
 ]
 .date[
-### 2025-09-03
+### December 4, 2025
 ]
 
 ---
@@ -38,229 +35,151 @@ class: center, middle, inverse, title-slide
 
 
 
-``` r
-style_xaringan(
-  title_slide_background_image = "img/confetti.jpg"
-)
-```
 
 
 class: center, middle
 
-## A statement of the overall goal / research question
+## Using this dataset, I will analyze how to help this business thrive. By looking at factors such as time of day, drinks, day of the week, and price, I can look to see what business decisions would need to be made to reflect these trends. 
+
 
 ---
 
-class: inverse, center, middle
+# The Dataset
 
-# Section title
+- The data spans one year
 
+- There are 3547 rows, each being a different coffee order 
+
+- There are 11 columns: hour of the day (numerical), if the patron paid cash or card, money (price), the drink ordered, the time of day (morning, afternoon, evening), what day of the week it was, what month it was, the day of the week numerically (ex, 5 for Friday), the month numerically (ex. 3 for March), the exact date, and the exact time of sale. 
 ---
 
-# Hello World
-
-- Click the `Knit` button to compile your presentation
-
-- Make sure to commit and push all resulting files to your GitHub repo
-
----
-
-class: inverse, middle, center
-
-# Using xaringan
-
----
-
-# xaringan
-
-- The presentation is created using the `xaringan` package
-
-- Use `---` to separate slides and `--` for incremental builds
-
---
-
-- Like this
-
----
-
-# Layouts
-
-You can use plain text
-
-- or bullet points
-
-.pull-left[
-or text in two columns `\(^*\)`
-]
-.pull-right[
-- like
-- this
-]
-
-.footnote[
-[*] And add footnotes
-]
-
----
-
-# Code
 
 
 ``` r
-# a boring regression
-model &lt;- lm(dist ~ speed, data = cars)
-tidy(model)
+tibble(coffee)
 ```
+
+```
+## # A tibble: 3,547 × 11
+##    hour_of_day cash_type money coffee_name        Time_of_Day Weekday Month_name
+##          &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;              &lt;chr&gt;       &lt;chr&gt;   &lt;chr&gt;     
+##  1          10 card       38.7 Latte              Morning     Fri     Mar       
+##  2          12 card       38.7 Hot Chocolate      Afternoon   Fri     Mar       
+##  3          12 card       38.7 Hot Chocolate      Afternoon   Fri     Mar       
+##  4          13 card       28.9 Americano          Afternoon   Fri     Mar       
+##  5          13 card       38.7 Latte              Afternoon   Fri     Mar       
+##  6          15 card       33.8 Americano with Mi… Afternoon   Fri     Mar       
+##  7          16 card       38.7 Hot Chocolate      Afternoon   Fri     Mar       
+##  8          18 card       33.8 Americano with Mi… Night       Fri     Mar       
+##  9          19 card       38.7 Cocoa              Night       Fri     Mar       
+## 10          19 card       33.8 Americano with Mi… Night       Fri     Mar       
+## # ℹ 3,537 more rows
+## # ℹ 4 more variables: Weekdaysort &lt;dbl&gt;, Monthsort &lt;dbl&gt;, Date &lt;date&gt;,
+## #   Time &lt;time&gt;
+```
+
+---
+
+# Most Frequent Hour of Day
+
+```
+## # A tibble: 17 × 2
+##    hour_of_day     n
+##          &lt;dbl&gt; &lt;int&gt;
+##  1          10   328
+##  2          11   283
+##  3          16   278
+##  4           9   242
+##  5          12   241
+##  6          17   237
+##  7          15   236
+##  8           8   235
+##  9          19   229
+## 10          13   225
+## 11          14   225
+## 12          18   218
+## 13          21   195
+## 14          20   169
+## 15          22   113
+## 16           7    88
+## 17           6     5
+```
+---
+# Most Frequent Hour of Day
+&lt;img src="presentation_files/figure-html/bar-time-1.png" width="80%" /&gt;
+- 10 AM is the most popular hour, but afternoon is the most popular time of day
+---
+
+## Day of the Week
+
+
+```
+## # A tibble: 7 × 2
+##   Weekdaysort     n
+##         &lt;dbl&gt; &lt;int&gt;
+## 1           2   572
+## 2           1   544
+## 3           5   532
+## 4           4   510
+## 5           3   500
+## 6           6   470
+## 7           7   419
+```
+- We can see that Tuesday is the most popular day of the week in the coffee shop
+
+---
+
+&lt;img src="presentation_files/figure-html/time-day-1.png" width="80%" /&gt;
+- More sales in mid morning and mid afternoon
+- Dips in sales in the early morning and late at night
+---
+
+## Most Popular Drinks
+
+```
+## # A tibble: 8 × 2
+##   coffee_name             n
+##   &lt;chr&gt;               &lt;int&gt;
+## 1 Americano with Milk   809
+## 2 Latte                 757
+## 3 Americano             564
+## 4 Cappuccino            486
+## 5 Cortado               287
+## 6 Hot Chocolate         276
+## 7 Cocoa                 239
+## 8 Espresso              129
+```
+---
+## Most Popular Drinks
+&lt;img src="presentation_files/figure-html/bar-1.png" width="80%" /&gt;
+---
+## Frequency of Drinks for Each Day of the Week
+&lt;img src="presentation_files/figure-html/violin-1.png" width="80%" /&gt;
+---
+## Linear Regression 
+- Compares the amount of money made with different days of the week
 
 ```
 ## # A tibble: 2 × 5
-##   term        estimate std.error statistic  p.value
-##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 (Intercept)   -17.6      6.76      -2.60 1.23e- 2
-## 2 speed           3.93     0.416      9.46 1.49e-12
-```
-
-``` r
-glance(model)
+##   term        estimate std.error statistic p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 (Intercept)  31.8       0.180     177.     0    
+## 2 Weekdaysort  -0.0427    0.0415     -1.03   0.304
 ```
 
 ```
-## # A tibble: 1 × 12
-##   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
-##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1     0.651         0.644  15.4      89.6 1.49e-12     1  -207.  419.  425.
-## # ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;
+## [1] 0.0002980488
 ```
-
+- The equation is money = 31.809 -0.0427* Weekdaysort 
+- As the days of the week goes on, the total amount of money spent by each customer is expected to decrease 0.0427 dollars, or 4 cents
+- The baseline for this is $31.81 spent 
+- R^2 value is 0.0002980488. We can expect basically a 0% variability, more specifically, a 0.03% variability
 ---
-
-# Plots
-
-
-
-&lt;img src="presentation_files/figure-html/plot-iris-1.png" width="80%" /&gt;
-
----
-
-## Plot and text
-
-.pull-left[
-- Some text
-- goes here
-]
-.pull-right[
-&lt;img src="presentation_files/figure-html/unnamed-chunk-2-1.png" width="100%" /&gt;
-]
-
----
-
-# Tables
-
-If you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,
-
-&lt;table&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:right;"&gt; Sepal.Length &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; Sepal.Width &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; Petal.Length &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; Petal.Width &lt;/th&gt;
-   &lt;th style="text-align:left;"&gt; Species &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 5.1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.5 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.2 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; setosa &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 4.9 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.2 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; setosa &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 4.7 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.2 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; setosa &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 4.6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.5 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.2 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; setosa &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 5.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.2 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; setosa &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 5.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.9 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.7 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.4 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; setosa &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
----
-
-# Images
-
-&lt;div class="figure" style="text-align: center"&gt;
-&lt;img src="https://images.unsplash.com/photo-1535448033526-c0e85c9e6968?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1650&amp;q=80" alt="Image credit: Photo by Jörg Angeli on Unsplash." width="60%" /&gt;
-&lt;p class="caption"&gt;Image credit: Photo by Jörg Angeli on Unsplash.&lt;/p&gt;
-&lt;/div&gt;
-
-Or you can also include a full page image. See next slide.
-
----
-
-background-image: url(https://images.unsplash.com/photo-1535448033526-c0e85c9e6968?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1650&amp;q=80)
-
----
-
-# Math Expressions
-
-You can write LaTeX math expressions inside a pair of dollar signs, e.g. &amp;#36;\alpha+\beta$ renders `\(\alpha+\beta\)`. You can use the display style with double dollar signs:
-
-```
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-```
-
-`$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$`
-
-Limitations:
-
-1. The source code of a LaTeX math expression must be in one line, unless it is inside a pair of double dollar signs, in which case the starting `$$` must appear in the very beginning of a line, followed immediately by a non-space character, and the ending `$$` must be at the end of a line, led by a non-space character;
-
-1. There should not be spaces after the opening `$` or before the closing `$`.
-
-1. Math does not work on the title slide (see [#61](https://github.com/yihui/xaringan/issues/61) for a workaround).
-
----
-
-# Feeling adventurous?
-
-- Want to find out more about `xaringan`? See https://slides.yihui.name/xaringan/#1.
-
-- You are welcomed to use the default styling of the slides. In fact, that's what I expect majority of you will do. You will differentiate yourself with the content of your presentation.
-
-- But some of you might want to play around with slide styling. The 
-`xaringanthemer` provides some solutions for this that: https://pkg.garrickadenbuie.com/xaringanthemer.
-
-- And if you want more bells and whistles, there is also `xaringanExtra`: https://pkg.garrickadenbuie.com/xaringanExtra.
+## Conclusion
+- Tuesday is the most popular day of the week
+- 10 AM vs Afternoon
+- Amount of money spent is expected to decline throughout the week
+- Americano with milk is most popular
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

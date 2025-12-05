@@ -1,23 +1,56 @@
 ---
-title: "Project proposal"
-author: "Team name"
-output: github_document
+title: "Project - Coffee Sales"
+author: "Riley Martindale"
+output:
+  pdf_document: default
+  html_document: default
 ---
 
-```{r load-packages, message = FALSE}
+```{r load-packages, message = FALSE, echo = FALSE, eval = TRUE}
 library(tidyverse)
-library(broom)
+library(dplyr)
 ```
 
-## 1. Introduction
+Introduction:
+
+The data set I am looking at is called coffe_sales. It looks into the data for the sales of a coffee shop. The data spans one year. There are 3547 rows, each being a different coffee order. There are 11 columns: hour of the day (numerical), if the patron paid cash or card, money (price), the drink ordered, the time of day (morning, afternoon, evening), what day of the week it was, what month it was, the day of the week numerically (ex, 5 for Friday), the month numerically (ex. 3 for March), the exact date, and the exact time of sale. 
+
+This data set is from Kaggle https://www.kaggle.com/datasets/wardabilal/exploring-coffee-sales-with-eda-and-visualization
+The author does not provide any information on where this data is from. 
+
+I would like to use this dataset to look at trends within this data, such as what drinks are the most popular, and what time of day sells the most. It would also be interesting to look at correlations between the drinks, such as if a certain drink sells better at a time, or if cheaper drinks sell better than more expensive drinks. I would also like to look at the correlation between the day of the week and the price of drinks (to see if people "treat themselves" at the end of the week). Theoretically, I'll be able to look at this data and use it to notice all the trends of the coffee shop. 
 
 
+Data:
 
-## 2. Data
+```{r message = FALSE, eval = TRUE}
+coffee <- read_csv("repo-structure/data/Coffe_sales.csv")
+```
+
+```{r glimpse, eval = TRUE}
+glimpse(coffee)
+```
 
 
+Data Analysis Plan:
 
-## 3. Data analysis plan
+I can use this data set to look at different factors. I'll compare the time of day with the frequency to see when coffee is the most popular. I can also find the frequency of each drink to see which is the most popular. 
+
+I predict that coffee will be most popular in the morning and that a latte will be the most popular drink. To support this, the frequency should be highest for the latte and the morning should be most frequent for time of day.
+
+Currently, I'm able to look at each variable separately, but I don't know how to compare them too each other in a frequency or contingency table, for example. I think that that would be helpful to my analysis. 
+  
+  Most frequent hour of day
+```{r hour, eval = TRUE}
+coffee %>%
+  count(hour_of_day, sort = TRUE)
+```
 
 
+  Most frequent day of the week
+```{r day, eval = TRUE}
+coffee %>%
+  count(Weekdaysort, sort = TRUE)
+```
 
+We can see that Tuesday is the most popular day of the week in the coffee shop and 10 am is the most popular time. Some times are not in the table because the coffee shop would be closed. This can help us explore how to maximize sales in other times and match the demand of these times. 

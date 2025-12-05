@@ -1,9 +1,8 @@
 ---
-title: "Presentation title"
-subtitle: "Presentation subtitle (if any)"
-author: "Team name <br> Names of team members"
-institute: "University of Edinburgh"
-date: "`r Sys.Date()`"
+title: "Coffee Sales"
+author: "Riley Martindale"
+institute: "Math225 #61909"
+date: "December 4, 2025"
 output:
   xaringan::moon_reader:
     css: xaringan-themer.css
@@ -22,6 +21,10 @@ library(tidymodels)
 library(palmerpenguins)
 library(knitr)
 library(xaringanthemer)
+library(dplyr)
+library(parsnip)
+library(broom)
+library(readr)
 ```
 
 ```{r setup, include=FALSE}
@@ -29,175 +32,131 @@ library(xaringanthemer)
 knitr::opts_chunk$set(fig.retina = 3, dpi = 300, fig.width = 6, fig.asp = 0.618, out.width = "80%")
 ```
 
-```{r load-data, include=FALSE}
-# Load your data here
+```{r load-data, include=FALSE, eval = TRUE}
+coffee <- read_csv("../data/Coffe_sales.csv")
 ```
 
-```{r}
+```{r echo = FALSE}
 style_xaringan(
-  title_slide_background_image = "img/confetti.jpg"
+  title_slide_background_image = "img/dark_blue_gradient_background.jpg"
 )
 ```
 
 
 class: center, middle
 
-## A statement of the overall goal / research question
+## Using this dataset, I will analyze how to help this business thrive. By looking at factors such as time of day, drinks, day of the week, and price, I can look to see what business decisions would need to be made to reflect these trends. 
+
 
 ---
 
-class: inverse, center, middle
+# The Dataset
 
-# Section title
+- The data spans one year
 
+- There are 3547 rows, each being a different coffee order 
+
+- There are 11 columns: hour of the day (numerical), if the patron paid cash or card, money (price), the drink ordered, the time of day (morning, afternoon, evening), what day of the week it was, what month it was, the day of the week numerically (ex, 5 for Friday), the month numerically (ex. 3 for March), the exact date, and the exact time of sale. 
 ---
 
-# Hello World
 
-- Click the `Knit` button to compile your presentation
-
-- Make sure to commit and push all resulting files to your GitHub repo
-
----
-
-class: inverse, middle, center
-
-# Using xaringan
-
----
-
-# xaringan
-
-- The presentation is created using the `xaringan` package
-
-- Use `---` to separate slides and `--` for incremental builds
-
---
-
-- Like this
-
----
-
-# Layouts
-
-You can use plain text
-
-- or bullet points
-
-.pull-left[
-or text in two columns $^*$
-]
-.pull-right[
-- like
-- this
-]
-
-.footnote[
-[*] And add footnotes
-]
-
----
-
-# Code
-
-```{r boring-regression}
-# a boring regression
-model <- lm(dist ~ speed, data = cars)
-tidy(model)
-glance(model)
+```{r glimpse, eval = TRUE, echo = TRUE}
+tibble(coffee)
 ```
 
 ---
 
-# Plots
-
-```{r recode-species, echo = FALSE}
-# In this chunk I'm doing a bunch of analysis that I don't want to present 
-# in my slides. But I need the resulting data frame for a plot I want to present.
-iris_modified <- iris %>%
-  mutate(Species = fct_other(Species, keep = "setosa"))
+# Most Frequent Hour of Day
+```{r hour, eval = TRUE, echo = FALSE}
+coffee %>%
+  count(hour_of_day, sort = TRUE)
 ```
-
-```{r plot-iris, echo = FALSE}
-# Code hidden with echo = FALSE
-# Uses modified iris dataset from previous chunk
-# Play around with height and width until you're happy with the look
-ggplot(data = iris_modified, mapping = aes(x = Sepal.Width, y = Sepal.Length, color = Species)) +
-  geom_point() + 
-  theme_minimal() # theme options: https://ggplot2.tidyverse.org/reference/ggtheme.html
+---
+# Most Frequent Hour of Day
+```{r bar-time, eval = TRUE, echo=FALSE}
+coffee %>%
+  ggplot(aes(y = Time_of_Day))+
+  geom_bar()+
+  labs(
+    title = "Frequency of Sales based on Time Periods",
+    y = "Time of Day",
+    x = "Frequency"
+  )
 ```
+- 10 AM is the most popular hour, but afternoon is the most popular time of day
+---
+
+## Day of the Week
+
+```{r day, eval = TRUE, echo = FALSE}
+coffee %>%
+  count(Weekdaysort, sort = TRUE)
+```
+- We can see that Tuesday is the most popular day of the week in the coffee shop
 
 ---
 
-## Plot and text
-
-.pull-left[
-- Some text
-- goes here
-]
-.pull-right[
-```{r warning=FALSE, out.width="100%", fig.width=4, echo=FALSE}
-# see how I changed out.width and fig.width from defaults
-# to make the figure bigger
-ggplot(penguins, aes(x = bill_length_mm, y = species, color = species)) +
-  geom_boxplot() +
-  theme_minimal()
+```{r time-day, eval = TRUE, echo = FALSE}
+coffee %>%
+  ggplot(mapping = aes(x = Weekdaysort, y = hour_of_day))+
+  geom_hex()+
+  labs(
+    title = "Time of Day and Day of Week",
+    x = "Weekday",
+    y = "Hour of Day"
+  )
 ```
-]
-
+- More sales in mid morning and mid afternoon
+- Dips in sales in the early morning and late at night
 ---
 
-# Tables
-
-If you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,
-
-```{r iris-table, echo = FALSE}
-kable(head(iris), format = "html")
+## Most Popular Drinks
+```{r drink, eval = TRUE, echo=FALSE}
+coffee %>%
+  count(coffee_name, sort = TRUE)
 ```
-
 ---
-
-# Images
-
-```{r castle, echo = FALSE, out.width = "60%", fig.align = "center", fig.cap = "Image credit: Photo by Jörg Angeli on Unsplash."}
-include_graphics("https://images.unsplash.com/photo-1535448033526-c0e85c9e6968?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80")
+## Most Popular Drinks
+```{r bar, eval = TRUE, echo=FALSE}
+coffee %>%
+  ggplot(aes(y = coffee_name))+
+  geom_bar()+
+  labs(
+    title = "Frequency of Drinks",
+    y = "Drink",
+    x = "Frequency"
+  )
 ```
-
-Or you can also include a full page image. See next slide.
-
 ---
-
-background-image: url(https://images.unsplash.com/photo-1535448033526-c0e85c9e6968?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80)
-
----
-
-# Math Expressions
-
-You can write LaTeX math expressions inside a pair of dollar signs, e.g. &#36;\alpha+\beta$ renders $\alpha+\beta$. You can use the display style with double dollar signs:
-
+## Frequency of Drinks for Each Day of the Week
+```{r violin, eval = TRUE, echo = FALSE}
+coffee %>%
+  ggplot(aes(y = coffee_name, x = Weekdaysort))+
+  geom_violin()+
+  labs(
+    title = "Frequency of Drinks Each Day",
+    y = "Drink",
+    x = "Day of the Week"
+  )
 ```
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-```
-
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-
-Limitations:
-
-1. The source code of a LaTeX math expression must be in one line, unless it is inside a pair of double dollar signs, in which case the starting `$$` must appear in the very beginning of a line, followed immediately by a non-space character, and the ending `$$` must be at the end of a line, led by a non-space character;
-
-1. There should not be spaces after the opening `$` or before the closing `$`.
-
-1. Math does not work on the title slide (see [#61](https://github.com/yihui/xaringan/issues/61) for a workaround).
-
 ---
+## Linear Regression 
+- Compares the amount of money made with different days of the week
+```{r linear, eval = TRUE, echo = FALSE}
+day_money <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(money ~ Weekdaysort, data = coffee)
+tidy(day_money)
 
-# Feeling adventurous?
-
-- Want to find out more about `xaringan`? See https://slides.yihui.name/xaringan/#1.
-
-- You are welcomed to use the default styling of the slides. In fact, that's what I expect majority of you will do. You will differentiate yourself with the content of your presentation.
-
-- But some of you might want to play around with slide styling. The 
-`xaringanthemer` provides some solutions for this that: https://pkg.garrickadenbuie.com/xaringanthemer.
-
-- And if you want more bells and whistles, there is also `xaringanExtra`: https://pkg.garrickadenbuie.com/xaringanExtra.
+glance(day_money)$r.squared
+```
+- The equation is money = 31.809 -0.0427* Weekdaysort 
+- As the days of the week goes on, the total amount of money spent by each customer is expected to decrease 0.0427 dollars, or 4 cents
+- The baseline for this is $31.81 spent 
+- R^2 value is 0.0002980488. We can expect basically a 0% variability, more specifically, a 0.03% variability
+---
+## Conclusion
+- Tuesday is the most popular day of the week
+- 10 AM vs Afternoon
+- Amount of money spent is expected to decline throughout the week
+- Americano with milk is most popular
